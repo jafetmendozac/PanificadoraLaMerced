@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-from ui.reportes import ReportesTab
+# from ui.reportes import ReportesTab
 from ui.insumos import InsumosTab
 from ui.empleados import EmpleadosTab
 from ui.clientes import ClientesTab
 from ui.cargos import CargosTab
-from ui.proveedores import ProveedoresTab
+# from ui.proveedores import ProveedoresTab
 from ui.productos import ProductosTab
 from ui.pedidos_cliente import PedidosClienteTab
 
@@ -22,14 +22,18 @@ class App:
         ClientesTab(self.notebook) #1
         ProductosTab(self.notebook) #2
         EmpleadosTab(self.notebook)#3
-        ProveedoresTab(self.notebook)#4
-        ReportesTab(self.notebook)#5
+        # ProveedoresTab(self.notebook)#4
+        # ReportesTab(self.notebook)#5
         InsumosTab(self.notebook)#6
         CargosTab(self.notebook)#7
-        # PedidosClienteTab(self.notebook)     #8
+        PedidosClienteTab(self.notebook)     #8
 
     def run(self):
         self.root.mainloop()
+
+
+
+
 
 
 # import tkinter as tk
