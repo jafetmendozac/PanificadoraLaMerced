@@ -9,6 +9,7 @@ from ui.cargos import CargosTab
 # from ui.proveedores import ProveedoresTab
 from ui.productos import ProductosTab
 from ui.pedidos_cliente import PedidosClienteTab
+from ui.detalle_pedido import DetallePedidoTab
 
 class App:
     def __init__(self):
@@ -27,6 +28,7 @@ class App:
         InsumosTab(self.notebook)#6
         CargosTab(self.notebook)#7
         PedidosClienteTab(self.notebook)     #8
+        DetallePedidoTab(self.notebook)     #8
 
     def run(self):
         self.root.mainloop()
