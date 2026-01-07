@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Base de datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: panificadora_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: panificadora_la_merced_fn3
+      MYSQL_USER: panadero
+      MYSQL_PASSWORD: panadero123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - panificadora_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend FastAPI
+  backend:
+    build: ./backend
+    container_name: panificadora_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: panadero
+      DB_PASSWORD: panadero123
+      DB_NAME: panificadora_la_merced_fn3
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - panificadora_network
+    volumes:
+      - ./backend:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  mysql_data:
+
+networks:
+  panificadora_network:
+    driver: bridge
