@@ -135,7 +135,7 @@ INSERT INTO Cliente (nombre, apellido_paterno, apellido_materno, telefono_celula
 ('Juan', 'Perez', 'Gomez', '987654321'),
 ('Maria', 'Lopez', 'Torres', '912345678'),
 ('Carlos', 'Rodriguez', 'Silva', '923456789'),
-('Ana', 'Martinez', 'Vega', '934567890'),
+('Ana', 'Martínez', 'Vega', '934567890'),
 ('Luis', 'Garcia', 'Flores', '945678901'),
 ('Rosa', 'Sanchez', 'Diaz', '956789012'),
 ('Pedro', 'Ramirez', 'Cruz', '967890123'),
@@ -172,23 +172,23 @@ INSERT INTO Empleado (nombre, apellido_paterno, apellido_materno, turno, id_carg
 ('Ricardo', 'Chavez', 'Morales', 0, 3),  -- Repartidor turno mañana
 ('Fernando', 'Silva', 'Mendoza', 1, 3);  -- Repartidor turno tarde
 
--- 6. PRODUCTOS
-INSERT INTO Producto (nombre_producto, precio_unitario, cantidad_producto,id_insumo, id_proveedor) VALUES
-('Pan Francés', 0.30, 100, 1, 1),        -- Harina de Trigo
-('Pan Integral', 0.50, 80, 1, 2),        -- Harina de Trigo
-('Torta Chocolate', 25.00, 5, 8, 3),     -- Chocolate
-('Pan de Yema', 0.50, 60, 6, 1),         -- Huevos
-('Pan de Molde', 5.00, 20, 1, 2),        -- Harina de Trigo
-('Croissant', 2.50, 30, 5, 4),           -- Mantequilla
-('Empanada de Pollo', 3.50, 40, 1, 6),   -- Harina de Trigo
-('Empanada de Carne', 3.50, 35, 1, 3),   -- Harina de Trigo
-('Torta de Vainilla', 25.00, 3, 9, 5),   -- Vainilla
-('Torta de Fresa', 28.00, 2, 1, 2),      -- Harina de Trigo
-('Alfajor', 1.50, 50, 1, 6),             -- Harina de Trigo
-('Suspiro Limeño', 4.00, 15, 7, 7),      -- Leche
-('Queque Inglés', 1.00, 45, 1, ),       -- Harina de Trigo
-('Rosquita', 0.80, 70, 4, 7),            -- Azúcar
-('Pan de Camote', 0.60, 55, 1, 8);     
+-- 6. PRODUCTOS (con id_insumos e id_pedido)
+INSERT INTO Producto (nombre_producto, precio_unitario, cantidad_producto, id_insumos, id_pedido) VALUES
+('Pan Frances', 0.30, 100, 1, NULL),        -- Harina de Trigo
+('Pan Integral', 0.50, 80, 1, NULL),        -- Harina de Trigo
+('Torta Chocolate', 25.00, 5, 8, NULL),     -- Chocolate
+('Pan de Yema', 0.50, 60, 6, NULL),         -- Huevos
+('Pan de Molde', 5.00, 20, 1, NULL),        -- Harina de Trigo
+('Croissant', 2.50, 30, 5, NULL),           -- Mantequilla
+('Empanada de Pollo', 3.50, 40, 1, NULL),   -- Harina de Trigo
+('Empanada de Carne', 3.50, 35, 1, NULL),   -- Harina de Trigo
+('Torta de Vainilla', 25.00, 3, 9, NULL),   -- Vainilla
+('Torta de Fresa', 28.00, 2, 1, NULL),      -- Harina de Trigo
+('Alfajor', 1.50, 50, 1, NULL),             -- Harina de Trigo
+('Suspiro Lime', 4.00, 15, 7, NULL),      -- Leche
+('Queque Ingles', 1.00, 45, 1, NULL),       -- Harina de Trigo
+('Rosquita', 0.80, 70, 4, NULL),            -- Azúcar
+('Pan de Camote', 0.60, 55, 1, NULL);       -- Harina de Trigo
 
 -- 7. PEDIDOS A PROVEEDORES
 INSERT INTO Pedido_proveedor (fecha_pedido, fecha_entrega, cantidad, precio_unitario, id_insumo, id_proveedor) VALUES

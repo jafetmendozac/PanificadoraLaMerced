@@ -23,6 +23,8 @@ docker-compose down
 docker-compose down -v
 
 docker-compose up -d --build
-
+docker-compose up -d 
 
 docker ps
+
+docker logs panificadora_db

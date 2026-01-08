@@ -13,6 +13,7 @@ from ui.detalle_pedido import DetallePedidoTab
 from ui.estado_pedido import EstadosPedidoTab
 from ui.pedido_proveedor import PedidosProveedorTab
 from ui.produccion import ProduccionTab
+from ui.reportes import ReportesTab
 
 class App:
     def __init__(self):
@@ -30,10 +31,11 @@ class App:
         InsumosTab(self.notebook)#5
         CargosTab(self.notebook)#6
         PedidosClienteTab(self.notebook)     #7
-        DetallePedidoTab(self.notebook)     #8
+        # DetallePedidoTab(self.notebook)     #8
         EstadosPedidoTab(self.notebook)     #9
         PedidosProveedorTab(self.notebook)     #10
         ProduccionTab(self.notebook)     #11
+        ReportesTab(self.notebook)     #11
 
         # ReportesTab(self.notebook)#5
 

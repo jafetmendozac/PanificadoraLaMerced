@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 from api.type import get, post, put, delete
 from datetime import date
 
+
 class PedidosClienteTab:
     endpoint = "/pedidos"
 
@@ -11,151 +12,202 @@ class PedidosClienteTab:
         notebook.add(self.frame, text="Pedidos Clientes")
 
         self.form = {}
+
+        # Variables visuales (backend recibe 0/1)
+        self.tipo_entrega_var = tk.StringVar(value="0")  # 0 = Recojo
+        self.tipo_pedido_var = tk.StringVar(value="0")   # 0 = Normal
+
         self._build_form()
         self._build_buttons()
         self._build_table()
         self.load()
 
+    # ======================
+    # FORMULARIO
+    # ======================
     def _build_form(self):
-        form_frame = ttk.LabelFrame(self.frame, text="Formulario Pedido", padding=10)
-        form_frame.pack(fill="x", padx=10, pady=10)
+        form = ttk.LabelFrame(self.frame, text="Formulario Pedido", padding=10)
+        form.pack(fill="x", padx=10, pady=10)
 
-        labels = [("id_cliente", "ID Cliente"), ("cantidad_producto", "Cantidad Producto")]
-        for i, (key, label) in enumerate(labels):
-            ttk.Label(form_frame, text=label).grid(row=i, column=0, sticky="w")
-            entry = ttk.Entry(form_frame)
+        fields = [
+            ("id_cliente", "ID Cliente"),
+            ("cantidad_producto", "Cantidad"),
+            ("fecha", "Fecha (YYYY-MM-DD)"),
+            ("id_pago", "ID Pago"),
+            ("id_estado", "ID Estado"),
+        ]
+
+        for i, (key, label) in enumerate(fields):
+            ttk.Label(form, text=label).grid(row=i, column=0, sticky="w")
+            entry = ttk.Entry(form)
             entry.grid(row=i, column=1, padx=5, pady=3, sticky="ew")
             self.form[key] = entry
 
-        form_frame.columnconfigure(1, weight=1)
+        # Fecha por defecto hoy
+        self.form["fecha"].insert(0, date.today().isoformat())
 
+        # Tipo Entrega (0/1)
+        ttk.Label(form, text="Tipo Entrega").grid(row=5, column=0, sticky="w")
+        ttk.Combobox(
+            form,
+            textvariable=self.tipo_entrega_var,
+            values=["0", "1"],  # 0 = Recojo, 1 = Delivery
+            state="readonly",
+            width=17
+        ).grid(row=5, column=1, sticky="w")
+
+        # Tipo Pedido (0/1)
+        ttk.Label(form, text="Tipo Pedido").grid(row=6, column=0, sticky="w")
+        ttk.Combobox(
+            form,
+            textvariable=self.tipo_pedido_var,
+            values=["0", "1"],  # 0 = Normal, 1 = Especial
+            state="readonly",
+            width=17
+        ).grid(row=6, column=1, sticky="w")
+
+        form.columnconfigure(1, weight=1)
+
+    # ======================
+    # BOTONES
+    # ======================
     def _build_buttons(self):
-        btn_frame = ttk.Frame(self.frame)
-        btn_frame.pack(fill="x", padx=10, pady=5)
-        ttk.Button(btn_frame, text="Guardar", command=self.create).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Actualizar", command=self.update_selected).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Eliminar", command=self.delete_selected).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Limpiar", command=self.clear).pack(side="left", padx=5)
+        frame = ttk.Frame(self.frame)
+        frame.pack(fill="x", padx=10, pady=5)
 
+        ttk.Button(frame, text="Guardar", command=self.create).pack(side="left", padx=5)
+        ttk.Button(frame, text="Actualizar", command=self.update_selected).pack(side="left", padx=5)
+        ttk.Button(frame, text="Eliminar", command=self.delete_selected).pack(side="left", padx=5)
+        ttk.Button(frame, text="Limpiar", command=self.clear).pack(side="left", padx=5)
+
+    # ======================
+    # TABLA
+    # ======================
     def _build_table(self):
-        columns = ("ID", "Cliente", "Fecha", "Cantidad", "Estado")
-        self.tree = ttk.Treeview(self.frame, columns=columns, show="headings")
-        for col in columns:
-            self.tree.heading(col, text=col)
-            self.tree.column(col, width=120)
+        cols = ("ID", "Id Cliente", "Fecha", "Cantidad", "Tipo Pedido", "Tipo Entrega", "Id Pago", "Id Estado")
+        self.tree = ttk.Treeview(self.frame, columns=cols, show="headings")
+
+        for c in cols:
+            self.tree.heading(c, text=c)
+            self.tree.column(c, width=110)
+
         self.tree.pack(fill="both", expand=True, padx=10, pady=10)
         self.tree.bind("<Double-1>", self.on_double_click)
 
+    # ======================
+    # LOAD
+    # ======================
     def load(self):
         try:
             res = get(self.endpoint)
             res.raise_for_status()
             data = res.json()
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudieron cargar pedidos: {e}")
+            messagebox.showerror("Error", e)
             return
 
         self.tree.delete(*self.tree.get_children())
+
         for p in data:
             self.tree.insert("", "end", values=(
-                p.get("id_pedido"),
-                p.get("id_cliente"),
-                p.get("fecha"),
-                p.get("cantidad_producto"),
-                p.get("id_estado")
+                p["id_pedido"],
+                p["id_cliente"],
+                p["fecha"],
+                p["cantidad_producto"],
+                p["tipo_pedido"],
+                p["tipo_entrega"],
+                p["id_pago"],
+                p["id_estado"]
             ))
 
+    # ======================
+    # CLEAR
+    # ======================
     def clear(self):
-        for entry in self.form.values():
-            entry.delete(0, "end")
-        for sel in self.tree.selection():
-            self.tree.selection_remove(sel)
+        for e in self.form.values():
+            e.delete(0, "end")
 
+        self.form["fecha"].insert(0, date.today().isoformat())
+        self.tipo_entrega_var.set("0")
+        self.tipo_pedido_var.set("0")
+        self.tree.selection_remove(*self.tree.selection())
+
+    # ======================
+    # FORM DATA
+    # ======================
     def _collect_form(self):
         try:
             return {
                 "id_cliente": int(self.form["id_cliente"].get()),
                 "cantidad_producto": int(self.form["cantidad_producto"].get()),
-                "fecha": date.today().isoformat(),
-                "tipo_entrega": False,
-                "tipo_pedido": False,
-                "id_pago": 1,
-                "id_estado": 1
+                "fecha": self.form["fecha"].get(),
+                "tipo_entrega": int(self.tipo_entrega_var.get()),
+                "tipo_pedido": int(self.tipo_pedido_var.get()),
+                "id_pago": int(self.form["id_pago"].get()),
+                "id_estado": int(self.form["id_estado"].get()),
             }
         except ValueError:
             return None
 
-    def validate(self, data):
-        if not data:
-            messagebox.showerror("Error", "ID Cliente y Cantidad deben ser números")
+    # ======================
+    # VALIDATE
+    # ======================
+    def validate(self, d):
+        if not d:
+            messagebox.showerror("Error", "Datos inválidos")
             return False
-        if data["cantidad_producto"] <= 0:
-            messagebox.showerror("Error", "La cantidad debe ser mayor a 0")
-            return False
-        if data["id_cliente"] <= 0:
-            messagebox.showerror("Error", "ID Cliente debe ser positivo")
+        if d["cantidad_producto"] <= 0:
+            messagebox.showerror("Error", "Cantidad inválida")
             return False
         return True
 
+    # ======================
+    # CRUD
+    # ======================
     def create(self):
-        data = self._collect_form()
-        if not self.validate(data):
+        d = self._collect_form()
+        if not self.validate(d):
             return
-        try:
-            res = post(self.endpoint, data)
-            res.raise_for_status()
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo crear pedido: {e}")
-            return
+        post(self.endpoint, d)
         self.clear()
         self.load()
 
-    def get_selected_id(self):
+    def update_selected(self):
         sel = self.tree.selection()
         if not sel:
-            return None
-        return self.tree.item(sel[0])["values"][0]
-
-    def update_selected(self):
-        id_ = self.get_selected_id()
-        if not id_:
-            messagebox.showwarning("Aviso", "Selecciona un pedido para actualizar")
             return
-        data = self._collect_form()
-        if not self.validate(data):
+        id_ = self.tree.item(sel[0])["values"][0]
+        d = self._collect_form()
+        if not self.validate(d):
             return
-        try:
-            res = put(f"{self.endpoint}/{id_}", data)
-            res.raise_for_status()
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo actualizar pedido: {e}")
-            return
+        put(f"{self.endpoint}/{id_}", d)
         self.clear()
         self.load()
 
     def delete_selected(self):
-        id_ = self.get_selected_id()
-        if not id_:
-            messagebox.showwarning("Aviso", "Selecciona un pedido para eliminar")
+        sel = self.tree.selection()
+        if not sel:
             return
-        if not messagebox.askyesno("Confirmar", "¿Eliminar el pedido seleccionado?"):
-            return
-        try:
-            res = delete(f"{self.endpoint}/{id_}")
-            res.raise_for_status()
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo eliminar pedido: {e}")
-            return
-        self.clear()
-        self.load()
+        id_ = self.tree.item(sel[0])["values"][0]
+        if messagebox.askyesno("Confirmar", "¿Eliminar pedido?"):
+            delete(f"{self.endpoint}/{id_}")
+            self.clear()
+            self.load()
 
+    # ======================
+    # DOUBLE CLICK
+    # ======================
     def on_double_click(self, event):
         sel = self.tree.selection()
         if not sel:
             return
-        item = self.tree.item(sel[0])["values"]
-        keys = ["id_pedido", "id_cliente", "fecha", "cantidad_producto", "id_estado"]
-        values = dict(zip(keys, item))
-        for k in ("id_cliente", "cantidad_producto"):
-            self.form[k].delete(0, "end")
-            self.form[k].insert(0, values.get(k, ""))
+        v = self.tree.item(sel[0])["values"]
+
+        keys = ["id_cliente", "fecha", "cantidad_producto", None, None, None, "id_pago", "id_estado"]
+        for k, val in zip(keys, v[1:]):
+            if k:
+                self.form[k].delete(0, "end")
+                self.form[k].insert(0, val)
+
+        self.tipo_pedido_var.set(str(v[4]))
+        self.tipo_entrega_var.set(str(v[5]))
