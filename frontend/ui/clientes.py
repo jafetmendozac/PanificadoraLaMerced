@@ -1,31 +1,3 @@
-# from ui.base_crud import BaseCRUD
-# from api.type import get, post
-
-# class ClientesTab(BaseCRUD):
-#     endpoint = "/clientes"
-#     columns = ("ID", "Nombre", "Apellido P", "Apellido M", "Teléfono")
-#     fields = ("nombre", "apellido_paterno", "apellido_materno", "telefono_celular")
-
-#     def __init__(self, notebook):
-#         super().__init__(notebook, "Clientes")
-
-#     def load(self):
-#         self.tree.delete(*self.tree.get_children())
-#         res = get(self.endpoint)
-#         for c in res.json():
-#             self.tree.insert("", "end", values=(
-#                 c["id_cliente"],
-#                 c["nombre"],
-#                 c["apellido_paterno"],
-#                 c["apellido_materno"],
-#                 c.get("telefono_celular", "")
-#             ))
-
-#     def save(self):
-#         data = {k: v.get() for k, v in self.form.items()}
-#         post(self.endpoint, data)
-#         self.clear()
-#         self.load()
 import tkinter as tk
 from tkinter import ttk, messagebox
 from api.type import get, post, put, delete
