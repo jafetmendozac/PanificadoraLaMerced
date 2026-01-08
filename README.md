@@ -103,7 +103,7 @@ En `database/` se encuentran:
 - `bd.sql`: dump o esquema de la base de datos.
 - `init.sql`: scripts de inicialización.
 
-Si usa Docker Compose, la inicialización puede ejecutarse automáticamente. Para inicializar manualmente con SQLite:
+Si usa Docker Compose, la inicialización se ejecutara automáticamente. Para inicializar manualmente con SQLite:
 
 ```bash
 sqlite3 database/bd.sqlite < database/init.sql
