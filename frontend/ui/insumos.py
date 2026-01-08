@@ -36,6 +36,7 @@ class InsumosTab:
         ttk.Button(btn_frame, text="Actualizar", command=self.update_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Eliminar", command=self.delete_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Limpiar", command=self.clear).pack(side="left", padx=5)
+        ttk.Button(btn_frame, text="Importar").pack(side="left", padx=5)
 
     def _build_table(self):
         columns = ("ID", "Nombre", "Unidad", "Stock Min", "Stock Max")

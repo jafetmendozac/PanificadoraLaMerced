@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# from backend.routers import detalle_pedido, pedido_cliente
 from database import engine
 import models
 

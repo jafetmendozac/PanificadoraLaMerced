@@ -1,12 +1,14 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
 
 class DetallePedidoBase(BaseModel):
-    cantidad: int
-    precio_unitario: float
-    id_pedido: int
+    cantidad: int = Field(..., gt=0)           # cantidad > 0
+    precio_unitario: float = Field(..., ge=0) # precio >= 0
+    id_pedido: int = Field(..., gt=0)      
 
 class DetallePedidoCreate(DetallePedidoBase):
+    pass
+
+class DetallePedidoUpdate(DetallePedidoBase):
     pass
 
 class DetallePedidoResponse(DetallePedidoBase):
