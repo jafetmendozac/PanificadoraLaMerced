@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from api.type import get, post, put, delete
+from tkinter import ttk, messagebox, filedialog
 
 class EmpleadosTab:
     endpoint = "/empleados"
@@ -54,6 +55,11 @@ class EmpleadosTab:
         ttk.Button(btn_frame, text="Eliminar", command=self.delete_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Limpiar", command=self.clear).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Importar", command=self.import_placeholder).pack(side="left", padx=5)
+        ttk.Button(
+            btn_frame,
+            text="Importar",
+            command=self.abrir_archivos
+        ).pack(side="left", padx=5)
 
     def _build_table(self):
         columns = ("ID", "Nombre", "Apellido P", "Apellido M", "Turno", "Cargo ID")
@@ -219,3 +225,10 @@ class EmpleadosTab:
     def import_placeholder(self):
         # placeholder para botón "Importar" — implementar según necesites
         messagebox.showinfo("Importar", "Funcionalidad de importación no implementada aún.")
+
+    def abrir_archivos(self):
+        filedialog.askopenfilename(
+            title="Selecciona un archivo",
+            initialdir="/",  # raíz del sistema
+            filetypes=[("Todos los archivos", "*.*")]
+        )

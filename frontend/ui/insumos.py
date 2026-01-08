@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from api.type import get, post, put, delete
+from tkinter import ttk, messagebox, filedialog
 
 class InsumosTab:
     endpoint = "/insumos"
@@ -36,8 +37,12 @@ class InsumosTab:
         ttk.Button(btn_frame, text="Actualizar", command=self.update_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Eliminar", command=self.delete_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Limpiar", command=self.clear).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Importar").pack(side="left", padx=5)
-
+        ttk.Button(
+            btn_frame,
+            text="Importar",
+            command=self.abrir_archivos
+        ).pack(side="left", padx=5)
+    
     def _build_table(self):
         columns = ("ID", "Nombre", "Unidad", "Stock Min", "Stock Max")
         self.tree = ttk.Treeview(self.frame, columns=columns, show="headings")
@@ -163,3 +168,10 @@ class InsumosTab:
         for k in ("nombre_insumo", "unidad_medida", "stock_minimo", "stock_maximo"):
             self.form[k].delete(0, "end")
             self.form[k].insert(0, values.get(k, ""))
+
+    def abrir_archivos(self):
+        filedialog.askopenfilename(
+            title="Selecciona un archivo",
+            initialdir="/",  # raíz del sistema
+            filetypes=[("Todos los archivos", "*.*")]
+        )

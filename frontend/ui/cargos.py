@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from api.type import get, post, put, delete
+from tkinter import ttk, messagebox, filedialog
 
 class CargosTab:
     endpoint = "/cargos"
@@ -33,7 +34,11 @@ class CargosTab:
         ttk.Button(btn_frame, text="Actualizar", command=self.update_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Eliminar", command=self.delete_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Limpiar", command=self.clear).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Importar").pack(side="left", padx=5)
+        ttk.Button(
+            btn_frame,
+            text="Importar",
+            command=self.abrir_archivos
+        ).pack(side="left", padx=5)
 
     def _build_table(self):
         columns = ("ID", "Cargo")
@@ -136,3 +141,10 @@ class CargosTab:
         # id, cargo
         self.form["cargo"].delete(0, "end")
         self.form["cargo"].insert(0, item[1] if len(item) > 1 else "")
+
+    def abrir_archivos(self):
+        filedialog.askopenfilename(
+            title="Selecciona un archivo",
+            initialdir="/",  # raíz del sistema
+            filetypes=[("Todos los archivos", "*.*")]
+        )
