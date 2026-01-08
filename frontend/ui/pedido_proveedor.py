@@ -1,3 +1,4 @@
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import date
@@ -38,6 +39,7 @@ class PedidosProveedorTab:
         ttk.Button(btn_frame, text="Guardar", command=self.save).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Actualizar", command=self.edit_selected).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Eliminar", command=self.delete_selected).pack(side="left", padx=5)
+        ttk.Button(btn_frame, text="Limpiar", command=self.clear).pack(side="left", padx=5)  # <-- botón Limpiar
 
     # Construir tabla
     def _build_table(self):
