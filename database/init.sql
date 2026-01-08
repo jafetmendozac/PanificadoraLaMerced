@@ -132,30 +132,30 @@ INSERT INTO Pago (metodo_pago) VALUES
 
 -- 2. CLIENTES
 INSERT INTO Cliente (nombre, apellido_paterno, apellido_materno, telefono_celular) VALUES
-('Juan', 'Pérez', 'Gómez', '987654321'),
-('María', 'Lopez', 'Torres', '912345678'),
-('Carlos', 'Rodríguez', 'Silva', '923456789'),
-('Ana', 'Martínez', 'Vega', '934567890'),
-('Luis', 'García', 'Flores', '945678901'),
-('Rosa', 'Sánchez', 'Díaz', '956789012'),
-('Pedro', 'Ramírez', 'Cruz', '967890123'),
+('Juan', 'Perez', 'Gomez', '987654321'),
+('Maria', 'Lopez', 'Torres', '912345678'),
+('Carlos', 'Rodriguez', 'Silva', '923456789'),
+('Ana', 'Martinez', 'Vega', '934567890'),
+('Luis', 'Garcia', 'Flores', '945678901'),
+('Rosa', 'Sanchez', 'Diaz', '956789012'),
+('Pedro', 'Ramirez', 'Cruz', '967890123'),
 ('Julia', 'Torres', 'Mendoza', '978901234'),
 ('Miguel', 'Vargas', 'Rojas', '989012345'),
 ('Carmen', 'Castillo', 'Herrera', '990123456');
 
 -- 3. PROVEEDORES
 INSERT INTO Proveedor (nombre, apellido_paterno, apellido_materno, telefono, ruc) VALUES
-('Roberto', 'Molina', 'Paz', '044-123456', '20123456789'),
-('Gloria', 'Fernández', 'Luna', '044-234567', '20234567890'),
-('Jorge', 'Quispe', 'Mamani', '044-345678', '20345678901'),
-('Teresa', 'Huamán', 'Alvarez', '044-456789', '20456789012');
+('Roberto', 'Molina', 'Paz', '044123456', '20123456789'),
+('Gloria', 'Fernandez', 'Luna', '044234567', '20234567890'),
+('Jorge', 'Quispe', 'Mamani', '044345678', '20345678901'),
+('Teresa', 'Huaman', 'Alvarez', '044456789', '20456789012');
 
 -- 4. INSUMOS
 INSERT INTO Insumos (nombre_insumo, unidad_medida, stock_minimo, stock_maximo) VALUES
 ('Harina de Trigo', 'kg', 50.000, 500.000),
 ('Levadura', 'kg', 5.000, 50.000),
 ('Sal', 'kg', 10.000, 100.000),
-('Azúcar', 'kg', 20.000, 200.000),
+('Azucar', 'kg', 20.000, 200.000),
 ('Mantequilla', 'kg', 10.000, 100.000),
 ('Huevos', 'unidad', 100.000, 1000.000),
 ('Leche', 'litro', 20.000, 200.000),
@@ -165,30 +165,30 @@ INSERT INTO Insumos (nombre_insumo, unidad_medida, stock_minimo, stock_maximo) V
 
 -- 5. EMPLEADOS (Ahora sí puede referenciar Cargo)
 INSERT INTO Empleado (nombre, apellido_paterno, apellido_materno, turno, id_cargo) VALUES
-('José', 'Paredes', 'Luján', 0, 1),      -- Panadero turno mañana
+('Jose', 'Paredes', 'Lujan', 0, 1),      -- Panadero turno mañana
 ('Mario', 'Quispe', 'Flores', 1, 1),     -- Panadero turno tarde
-('Sandra', 'Mejía', 'Castro', 0, 2),     -- Cajero turno mañana
+('Sandra', 'Mejia', 'Castro', 0, 2),     -- Cajero turno mañana
 ('Patricia', 'Ramos', 'Vera', 1, 2),     -- Cajero turno tarde
-('Ricardo', 'Chávez', 'Morales', 0, 3),  -- Repartidor turno mañana
+('Ricardo', 'Chavez', 'Morales', 0, 3),  -- Repartidor turno mañana
 ('Fernando', 'Silva', 'Mendoza', 1, 3);  -- Repartidor turno tarde
 
 -- 6. PRODUCTOS
-INSERT INTO Producto (nombre_producto, precio_unitario, cantidad_producto) VALUES
-('Pan Francés', 0.30, 100),
-('Pan Integral', 0.50, 80),
-('Torta Chocolate', 25.00, 5),
-('Pan de Yema', 0.50, 60),
-('Pan de Molde', 5.00, 20),
-('Croissant', 2.50, 30),
-('Empanada de Pollo', 3.50, 40),
-('Empanada de Carne', 3.50, 35),
-('Torta de Vainilla', 25.00, 3),
-('Torta de Fresa', 28.00, 2),
-('Alfajor', 1.50, 50),
-('Suspiro Limeño', 4.00, 15),
-('Queque Inglés', 1.00, 45),
-('Rosquita', 0.80, 70),
-('Pan de Camote', 0.60, 55);
+INSERT INTO Producto (nombre_producto, precio_unitario, cantidad_producto,id_insumo, id_proveedor) VALUES
+('Pan Francés', 0.30, 100, 1, 1),        -- Harina de Trigo
+('Pan Integral', 0.50, 80, 1, 2),        -- Harina de Trigo
+('Torta Chocolate', 25.00, 5, 8, 3),     -- Chocolate
+('Pan de Yema', 0.50, 60, 6, 1),         -- Huevos
+('Pan de Molde', 5.00, 20, 1, 2),        -- Harina de Trigo
+('Croissant', 2.50, 30, 5, 4),           -- Mantequilla
+('Empanada de Pollo', 3.50, 40, 1, 6),   -- Harina de Trigo
+('Empanada de Carne', 3.50, 35, 1, 3),   -- Harina de Trigo
+('Torta de Vainilla', 25.00, 3, 9, 5),   -- Vainilla
+('Torta de Fresa', 28.00, 2, 1, 2),      -- Harina de Trigo
+('Alfajor', 1.50, 50, 1, 6),             -- Harina de Trigo
+('Suspiro Limeño', 4.00, 15, 7, 7),      -- Leche
+('Queque Inglés', 1.00, 45, 1, ),       -- Harina de Trigo
+('Rosquita', 0.80, 70, 4, 7),            -- Azúcar
+('Pan de Camote', 0.60, 55, 1, 8);     
 
 -- 7. PEDIDOS A PROVEEDORES
 INSERT INTO Pedido_proveedor (fecha_pedido, fecha_entrega, cantidad, precio_unitario, id_insumo, id_proveedor) VALUES

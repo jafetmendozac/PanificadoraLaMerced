@@ -19,7 +19,13 @@ class ProductosTab:
         form_frame = ttk.LabelFrame(self.frame, text="Formulario Producto", padding=10)
         form_frame.pack(fill="x", padx=10, pady=10)
 
-        labels = [("nombre_producto", "Nombre"), ("precio_unitario", "Precio"), ("cantidad_producto", "Cantidad"), ("id_insumos", "ID Insumo")]
+        labels = [
+            ("nombre_producto", "Nombre"),
+            ("precio_unitario", "Precio Unitario"),
+            ("cantidad_producto", "Cantidad Producto"),
+            ("id_insumos", "ID Insumo"),
+            ("id_pedido", "ID Pedido")   # 👈 NUEVO
+        ]
         for i, (key, label) in enumerate(labels):
             ttk.Label(form_frame, text=label).grid(row=i, column=0, sticky="w")
             entry = ttk.Entry(form_frame)
@@ -38,7 +44,7 @@ class ProductosTab:
         ttk.Button(btn_frame, text="Importar").pack(side="left", padx=5)
 
     def _build_table(self):
-        columns = ("ID", "Producto", "Precio", "Cantidad", "ID Insumo")
+        columns = ("ID", "Producto", "Precio", "Cantidad", "ID Insumo", "ID Pedido")
         self.tree = ttk.Treeview(self.frame, columns=columns, show="headings")
         for col in columns:
             self.tree.heading(col, text=col)
@@ -57,13 +63,19 @@ class ProductosTab:
 
         self.tree.delete(*self.tree.get_children())
         for p in data:
+            id_pedido = p.get("id_pedido")
+            if id_pedido is None:
+                id_pedido = ""
+
             self.tree.insert("", "end", values=(
                 p.get("id_producto"),
-                str(p.get("nombre_producto", "")),
-                str(p.get("precio_unitario", "")),
-                str(p.get("cantidad_producto", "")),
-                str(p.get("id_insumos", ""))
+                p.get("nombre_producto", ""),
+                p.get("precio_unitario", ""),
+                p.get("cantidad_producto", ""),
+                p.get("id_insumos", ""),
+                id_pedido
             ))
+
 
     def clear(self):
         for entry in self.form.values():
@@ -73,11 +85,13 @@ class ProductosTab:
 
     def _collect_form(self):
         try:
+            id_pedido_raw = self.form["id_pedido"].get().strip()
             return {
                 "nombre_producto": self.form["nombre_producto"].get().strip(),
                 "precio_unitario": float(self.form["precio_unitario"].get()),
                 "cantidad_producto": int(self.form["cantidad_producto"].get()),
-                "id_insumos": int(self.form["id_insumos"].get())
+                "id_insumos": int(self.form["id_insumos"].get()),
+                "id_pedido": int(id_pedido_raw) if id_pedido_raw else None
             }
         except ValueError:
             return None
@@ -97,6 +111,9 @@ class ProductosTab:
             return False
         if data["id_insumos"] <= 0:
             messagebox.showerror("Error", "ID Insumo debe ser positivo")
+            return False
+        if data["id_pedido"] is not None and data["id_pedido"] <= 0:
+            messagebox.showerror("Error", "ID Pedido debe ser positivo")
             return False
         return True
 
@@ -157,9 +174,16 @@ class ProductosTab:
         if not sel:
             return
         item = self.tree.item(sel[0])["values"]
-        keys = ["id_producto", "nombre_producto", "precio_unitario", "cantidad_producto", "id_insumos"]
+        keys = [
+            "id_producto",
+            "nombre_producto",
+            "precio_unitario",
+            "cantidad_producto",
+            "id_insumos",
+            "id_pedido"
+        ]
         values = dict(zip(keys, item))
-        for k in ("nombre_producto", "precio_unitario", "cantidad_producto", "id_insumos"):
+        for k in ("nombre_producto", "precio_unitario", "cantidad_producto", "id_insumos", "id_pedido"):
             self.form[k].delete(0, "end")
             self.form[k].insert(0, values.get(k, ""))
 

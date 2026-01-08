@@ -18,7 +18,7 @@ class App:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Panificadora La Merced")
-        self.root.geometry("1200x700")
+        self.root.geometry("1300x700")
 
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True)
