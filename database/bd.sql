@@ -111,3 +111,51 @@ CREATE TABLE Produccion (
     FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_pedido) REFERENCES Pedido_cliente(id_pedido) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+
+
+
+1️⃣ Ventas por día
+📊 Total de productos vendidos por fecha
+
+SELECT
+    fecha,
+    SUM(cantidad_producto) AS total_vendido
+FROM Pedido_cliente
+GROUP BY fecha
+ORDER BY fecha;
+
+
+
+SELECT
+    i.nombre_insumo,
+    SUM(pp.cantidad) AS cantidad_total
+FROM Insumos i
+JOIN Pedido_proveedor pp
+    ON i.id_insumo = pp.id_insumo
+GROUP BY i.nombre_insumo
+ORDER BY cantidad_total DESC;
+
+
+
+SELECT
+    c.nombre,
+    c.apellido_paterno,
+    COUNT(pc.id_pedido) AS total_pedidos
+FROM Cliente c
+JOIN Pedido_cliente pc
+    ON c.id_cliente = pc.id_cliente
+GROUP BY c.id_cliente
+ORDER BY total_pedidos DESC;
+
+
+
+SELECT
+    CASE
+        WHEN turno = 0 THEN 'Mañana'
+        ELSE 'Tarde'
+    END AS turno,
+    SUM(cantidad_producida) AS total_producido
+FROM Produccion
+GROUP BY turno;

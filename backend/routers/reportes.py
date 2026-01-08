@@ -32,34 +32,6 @@ def ventas_por_dia(db: Session = Depends(get_db)):
 
     return data
 
-# 2️⃣ Productos más vendidos
-
-# 📦 Basado en Detalle_Pedido
-@router.get("/productos-mas-vendidos")
-def productos_mas_vendidos(db: Session = Depends(get_db)):
-    resultados = (
-        db.query(
-            models.Producto.nombre_producto,
-            func.sum(models.DetallePedido.cantidad).label("total_vendido")
-        )
-        .join(models.PedidoCliente,
-              models.Producto.id_pedido == models.PedidoCliente.id_pedido)
-        .join(models.DetallePedido,
-              models.DetallePedido.id_pedido == models.PedidoCliente.id_pedido)
-        .group_by(models.Producto.nombre_producto)
-        .order_by(func.sum(models.DetallePedido.cantidad).desc())
-        .all()
-    )
-
-    return [
-        {
-            "nombre_producto": r.nombre_producto,
-            "total_vendido": int(r.total_vendido)
-        }
-        for r in resultados
-    ]
-
-
 # 3️⃣ Insumos más comprados
 
 # 🏭 Compras a proveedores
@@ -137,34 +109,6 @@ def produccion_por_turno(db: Session = Depends(get_db)):
         {
             "turno": r.turno,
             "total_producido": r.total_producido
-        }
-        for r in resultados
-    ]
-
-
-
-
-# 6️⃣ Insumos con bajo stock (preventivo)
-
-# ⚠️ Stock mínimo menor o igual al máximo
-
-@router.get("/insumos-bajo-stock")
-def insumos_bajo_stock(db: Session = Depends(get_db)):
-    resultados = (
-        db.query(
-            models.Insumos.nombre_insumo,
-            models.Insumos.stock_minimo,
-            models.Insumos.stock_maximo
-        )
-        .filter(models.Insumos.stock_minimo <= models.Insumos.stock_maximo)
-        .all()
-    )
-
-    return [
-        {
-            "nombre_insumo": r.nombre_insumo,
-            "stock_minimo": float(r.stock_minimo),
-            "stock_maximo": float(r.stock_maximo)
         }
         for r in resultados
     ]
